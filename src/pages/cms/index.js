@@ -1,9 +1,13 @@
-import { useState, useCallback, memo } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
+import { useRouter } from 'next/navigation';
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 
+import { validateToken, getUserByToken } from '../../api/users';
 
 const App = () => {
+
+  const router = useRouter();
 
   const [frmOrganizationName, setFrmOrganizationName] = useState('');
   const handleSubmit = () => {
@@ -15,6 +19,10 @@ const App = () => {
 
 
   }
+
+  useEffect(() => {
+    router.push('/cms/login');
+  }, [router]);
 
   const handleChange = useCallback((e) => {
     setFrmOrganizationName(e.target.value);

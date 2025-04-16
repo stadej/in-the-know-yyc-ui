@@ -20,7 +20,7 @@ const sarabun = localFont({
   weight: "100 200 300 400 500 600 700 800 900",
 });
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({Component, pageProps }: AppProps) {
   const router = useRouter();
   const currentPage = router.pathname;
 
@@ -29,11 +29,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
       {currentPage.startsWith('/cms') ? (
         // ONLY FOR CMS
-        
-          <CmsLayout>
-            <Component {...pageProps} />
-          </CmsLayout>
-        
+            <CmsLayout>
+              <Component {...pageProps} />
+            </CmsLayout>
       ) : (
         // PUBLIC WEBSITE
         <PublicLayout>

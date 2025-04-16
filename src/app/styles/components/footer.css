@@ -21,9 +21,9 @@ div#publicLayout footer{
   }
   div#publicLayout footer div.newsletter-container div.col1{
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 35dvw;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
   }
   div#publicLayout footer div.newsletter-container div.col2{
     display: flex;
@@ -32,6 +32,12 @@ div#publicLayout footer{
     width: 31dvw;
   }
   div#publicLayout footer div.newsletter-container div h3{
+    font-size: 1.5rem;
+    padding:0;
+    margin:0 1.5rem;
+  }
+  div#publicLayout footer div.newsletter-container div a{
+    text-decoration: underline;
     font-size: 1.5rem;
     padding:0;
     margin:0;

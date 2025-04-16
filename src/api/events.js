@@ -4,6 +4,9 @@ import moment from "moment/moment";
 
 const api_endpoint = process.env.API_ENDPOINT || process.env.NEXT_PUBLIC_API_ENDPOINT;
 
+const dateNow = new Date();
+const dateTimeNow = moment(dateNow).format('YYYY-MM-DDTHH:mm:ss');
+
 const buildParams = (filters) => {
   //NOTE: filters: searchText | startDate | eventType (industry)
 
@@ -12,19 +15,20 @@ const buildParams = (filters) => {
   //    CSR uses the API required params to maintain the state variables
 
   return ({
-    searchText: (filters && filters.search) ? filters.search : (filters && filters.searchText) ? filters.searchText : '',
     startDate: (filters && filters.date) ? moment(filters.date).format('YYYY-MM-DDTHH:mm:ss') : (filters && filters.startDate) ? moment(filters.startDate).format('YYYY-MM-DDTHH:mm:ss') : '',
-    eventType: (filters && filters.industry) ? filters.industry : '',
     page: (filters && filters.page) ? filters.page : 0,
     sortField: 'eventDate',
-    sortDirection: 'desc',
-    size: (filters && filters.size) ? filters.size : 2,
+    sortDirection: 'asc',
+    size: (filters && filters.size) ? filters.size : 10,
+    searchText: (filters && filters.search) ? filters.search : '',
   });
 }
 
 export async function getFilteredEvents(filters = null) {
  
   const params = buildParams(filters);
+
+  console.log(params);
 
   try {
     const response = await axios.get(`${api_endpoint}/events`, { params });
@@ -48,10 +52,6 @@ export async function getEventById(id = null) {
 }
 
 export async function getNextEvents() { // LATEST EVENTS | HOME
-  const dateNow = new Date();
-
-  const dateTimeNow = moment(dateNow).format('YYYY-MM-DDTHH:mm:ss');
-
   try {
     const params = {
       sortField: 'eventDate',
@@ -102,27 +102,28 @@ export async function switchEventStatus(id, status){
 
 
 export async function updateEvent(event){
-
   
-
   const id = event.id;
-  const date = moment.utc(`${event.eventDate}T${event.eventTime}`);
+  const startTime = moment(`${event.eventDate}T${event.eventStartTime}`, moment.ISO_8601);
+  const endTime = moment(`${event.eventDate}T${event.eventEndTime}`, moment.ISO_8601);
+
   const e = {
     organizationName: event.organizationName,
     eventName: event.eventName,
     eventDescription: event.eventDescription,
-    eventDate: date.toISOString(),
+    eventDate: startTime.toISOString(),
+    eventEndTime: endTime.toISOString() || '',
     freeEvent: event.freeEvent,
     eventCost: event.eventCost,
     eventLink: event.eventLink,
     eventType: event.eventType,
+    onlineEvent: event.onlineEvent,
     location: event.location,
     industry: event.industry,
-    speakers: event.speakers,
     eventImage: event.eventImage
   }
 
-  console.log('UPDATE EVENT API:', e)
+  console.log('UPDATE EVENT API:', e);
 
   try {
     const response = await axiosInstance.put(`${api_endpoint}/events/${id}`, e);
@@ -134,20 +135,22 @@ export async function updateEvent(event){
 }
 
 export async function createEvent(event){
-  
-  const date = moment.utc(`${event.eventDate}T${event.eventTime}`);
+
+  const startTime = moment(`${event.eventDate}T${event.eventStartTime}`, moment.ISO_8601);
+  const endTime = moment(`${event.eventDate}T${event.eventEndTime}`, moment.ISO_8601);
   const e = {
     organizationName: event.organizationName,
     eventName: event.eventName,
     eventDescription: event.eventDescription,
-    eventDate: date.toISOString(),
+    eventDate: startTime.toISOString(),
+    eventEndTime: endTime.toISOString(),
     freeEvent: event.freeEvent,
     eventCost: event.eventCost,
     eventLink: event.eventLink,
     eventType: event.eventType,
+    onlineEvent: event.onlineEvent,
     location: event.location,
     industry: event.industry,
-    speakers: event.speakers,
     eventImage: event.eventImage
   }
 

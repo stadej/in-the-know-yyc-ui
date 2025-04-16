@@ -54,7 +54,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build docker image
-        run: docker build --build-arg GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }} --build-arg NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }} --build-arg API_ENDPOINT=${{ vars.API_ENDPOINT }} --build-arg NEXT_PUBLIC_API_ENDPOINT=${{ vars.NEXT_PUBLIC_API_ENDPOINT }} -t intheknowyyc/in-the-know-yyc-ui-${{ needs.prepare-env.outputs.env }} .
+        run: docker build --build-arg API_ENDPOINT=${{ vars.API_ENDPOINT }} --build-arg NEXT_PUBLIC_API_ENDPOINT=${{ vars.NEXT_PUBLIC_API_ENDPOINT }} -t intheknowyyc/in-the-know-yyc-ui-${{ needs.prepare-env.outputs.env }} .
 
       - name: Publish image to Docker Hub
         run: docker push intheknowyyc/in-the-know-yyc-ui-${{ needs.prepare-env.outputs.env }}:latest

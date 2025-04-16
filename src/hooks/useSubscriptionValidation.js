@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import sendEmailSubscription from '../api/newsletter'
 
 // Set event listener "submit" in the form
-const useFooterNewsletterValidation = (setIsDisabled, setErrorMessage, setSuccessMessage) => {
+const useSubscriptionValidation = (setIsDisabled, setErrorMessage, setSuccessMessage) => {
     useEffect(() => {
-        const newsletterForm = document.getElementById('footerNewsletterForm');
-        const newsletterInput = document.getElementById('inputNewsletterFooter');
+        const newsletterForm = document.getElementById('FooterForm');
+        const newsletterInput = document.getElementById('FooterEmail');
 
         const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
@@ -74,4 +74,4 @@ const sendSubscription = async (email, setErrorMessage, setSuccessMessage) => {
     }
 }
 
-export default useFooterNewsletterValidation;
+export default useSubscriptionValidation;

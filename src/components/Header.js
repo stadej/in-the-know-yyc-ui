@@ -19,18 +19,19 @@ const Header = () => {
     <header id="mainMenuHeader">
       <div className='headerContainer'>
         <div>
-          <Link href="/">
-            <Image src='/images/logo.png' alt="In The Know YYC - Logo" width={160} height={52} />
+          <Link href="/events">
+            <Image src='/images/intheknowlogored.png' alt="In The Know YYC - Logo" width={160} height={52} />
           </Link>
         </div>
         <button className='onlyMobile toggleMenu' id="toggleMobileMenu"><Image src={'/images/icons/menu.svg'} width={37} height={27} alt='' /></button>
-        <form action='/events' method='get' id="headerEventSearchForm">
+        {/* <form action='/events' method='get' id="headerEventSearchForm">
           <SearchEventInput inputId={'inputSearchHeader'} formId={'headerEventSearchForm'} />
-        </form>
+        </form> */}
         <nav>
           <ul>
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/events" onClick={eventRedirectWithFullRefresh}>All Events</Link></li>
+            {/* <li><Link href="/">Home</Link></li> */}
+            <li><Link href="/events" onClick={eventRedirectWithFullRefresh}>Events</Link></li>
+            <li><Link href="/subscribe">Subscribe</Link></li>
             <li><Link href="/about">About Us</Link></li>
             <li><Link href="/contact">Contact</Link></li>
             {/*

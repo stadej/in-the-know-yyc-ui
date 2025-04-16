@@ -6,48 +6,51 @@ import isValidImageUrl from "../utils/isValidImage";
 const CardHorizontal = ({ content }) => {
 
   const image = isValidImageUrl(content.eventImage);
-  const dateTime = moment(content.eventDate)
+  const dateTime = moment(content.eventDate+'Z');
+  const endTime = content.eventEndTime ? moment(content.eventEndTime+'Z'): "";
   
   return (
     <Link href={`/events/${content.id}`} className="linkCardHorizontal">
       <article className="cardHorizontal">
-        {/* IMAGE | REQUIRED */}
-        <div className="img" style={{backgroundImage: `url(${image})`}}></div>
 
         <div className="content">
-          {/* DATE | REQUIRED*/}
-          <h4>{dateTime.format('ddd, MMM DD YYYY, h:mm a z')}</h4>
-
-          <div className="name">
+          <ul>
             {/* TITLE | REQUIRED*/}
-            <h3>{content.eventName}</h3>
-
-            {/* DESCRIPTION | OPTIONAL */}
-            {content.eventDescription && content.eventDescription !== '' && (<p>{content.eventDescription}</p>)}
-          </div>
+            <h5><b>{content.eventName}</b></h5>
+          </ul>
+          <ul>
+            {/* DATE | REQUIRED*/}
+            <h4>{dateTime.format('ddd, MMM DD YYYY')}</h4>
+            {/* TIME RANGE | REQUIRED*/}
+            {endTime === "" && (
+              <h4>{dateTime.format('h:mm a z')}</h4>
+            )}
+            {endTime !== "" && (
+              <h4>{dateTime.format('h:mm') + ' - ' + endTime.format('h:mm a z')}</h4>
+            )}
+          </ul>
 
           <ul>
             {/* HOST | OPTIONAL */}
             {content.organizationName && content.organizationName !== '' && (
-              <li>
-                <label>Host/Facilitator:</label><br />
+              <ul>
+                <label><b>Host/Facilitator:&nbsp;</b></label>
                 <p>{content.organizationName}</p>
-              </li>
+              </ul>
             )}
 
-            {/* CATEGORIES (TYPES) & INDUSTRY | OPTIONAL */}
             <li className="categories">
-                {content.industry && content.industry !== '' && (<span>{content.industry}</span>)}
-                {content.eventType && content.eventType !== '' && (<span>{content.eventType}</span>)}
+                <span>{content.industry}</span>
+                <span>{content.eventType}</span>
             </li>
           </ul>
 
           <div className="location">
             {/* LOCATION | REQUIRED */}
-            <label>{content.location}</label>
+            <label>{content.onlineEvent ? 'Online' : content.location}</label>
 
             {/* ENTRANCE | REQUIRED */}
-            <span>{content.freeEvent ? 'General' : `$ ${content.eventCost.toFixed(2)}`}</span>
+            <span>{content.freeEvent ? 'Free' : `$ ${content.eventCost.toFixed(2)}`}</span>
           </div>
 
         </div>

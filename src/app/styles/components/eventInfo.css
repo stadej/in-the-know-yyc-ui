@@ -22,13 +22,13 @@ div#publicLayout section.eventInformation div.row-1{
 div#publicLayout section.eventInformation div.row-1 a{
     margin:0;
     padding:0;
-    width: 1rem;
-    height: 1rem;
+    width: 3rem;
+    height: 3rem;
     text-decoration:none;
 }
 div#publicLayout section.eventInformation div.row-1 a img{
-    width: 1rem;
-    height: 1rem;
+    width: 2rem;
+    height: 2rem;
 }
 div#publicLayout section.eventInformation div.row-1 h1{
     margin: 0 0 0 1rem;
@@ -67,7 +67,7 @@ div#publicLayout section.eventInformation div.row-3{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    width: 35%;
+    width: 600px;
 }
 div#publicLayout section.eventInformation div.row-3 h2{
     margin: 0 0 2rem 0;
@@ -100,7 +100,6 @@ div#publicLayout section.eventInformation div.row-3 ul{
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin:0 0 3.5rem 0;
     padding:0;
     list-style: none;
 }
@@ -127,18 +126,8 @@ div#publicLayout section.eventInformation div.row-3 label.time{background-image:
 div#publicLayout section.eventInformation div.row-3 label.location{background-image: url('/images/icons/location-gray.svg');}
 div#publicLayout section.eventInformation div.row-3 label.admission{color: #E42020;}
 div#publicLayout section.eventInformation div.row-3 a{
-    text-decoration: none;
-    width: fit-content;
-    padding: 1rem 6.6rem;
-    font-family: var(--font-sarabun);
-    font-weight: 600;
-    font-size: 1.5rem;
-    line-height: 2rem;
-    color:#FFFFFF;
-    border-radius: 10px;
-    border: 1px solid #00BFFF;
-    background: #007BFF;
-    margin:3.5rem 0 0 0;
+    text-decoration: underline;
+    color: #007BFF;
 }
 
 
@@ -159,11 +148,11 @@ div#publicLayout section.eventInformation div.row-3 a{
     }
     div#publicLayout section.eventInformation div.row-1 a{
         width: 100%;
-        height: 2rem;
+        height: 1.5rem;
     }
     div#publicLayout section.eventInformation div.row-1 a img{
-        width: 1.5rem;
-        height: 1.5rem;
+        width: 15px;
+        height: 15px;
     }
     div#publicLayout section.eventInformation div.row-2 img{
         width: 100%;
@@ -189,7 +178,6 @@ div#publicLayout section.eventInformation div.row-3 a{
         margin-bottom: 1rem;
     }
     div#publicLayout section.eventInformation div.row-3 a{
-        font-size: 1rem;
-        margin: 1rem auto;
+        font-size: .75rem;
     }
   }
