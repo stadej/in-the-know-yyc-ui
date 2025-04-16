@@ -28,6 +28,7 @@ export async function getFilteredEvents(filters = null) {
  
   const params = buildParams(filters);
 
+  console.log(api_endpoint);
   console.log(params);
 
   try {
