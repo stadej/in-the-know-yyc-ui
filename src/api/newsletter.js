@@ -1,4 +1,3 @@
-import axios from 'axios';
 import axiosInstance from '../utils/axiosInstance';
 
 export async function sendEmailSubscription(subRequest) {

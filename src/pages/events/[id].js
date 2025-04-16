@@ -3,8 +3,6 @@ import Image from "next/image";
 import "../../app/styles/components/eventInfo.css";
 import { getEventById } from '../../api/events';
 import moment from "moment/moment";
-import EventMap from "./map";
-import isValidImageUrl from "../../utils/isValidImage";
 
 // SEO: Pages metadata
 import pagesMetaData from "../../utils/pagesMetaData";
@@ -12,7 +10,6 @@ import PagesMetaData from "../../components/PagesMetaData";
 
 
 export default function EventInfo({ eventInformation, metadata }) {
-    const eventImage = isValidImageUrl(eventInformation.eventImage)
     const dateTime = moment(eventInformation.eventDate + 'Z');
     const endTime = eventInformation.eventEndTime ? moment(eventInformation.eventEndTime+'Z'): "";
 

@@ -62,7 +62,7 @@ const EventsFilter = ({params, events, handleFilter}) => {
 
     handleFilter(filteredEvents);
 
-  }, [events, startDate, endDate, costSelected, modalitySelected, industrySelected, eventTypeSelected]);
+  }, [events, handleFilter, startDate, endDate, costSelected, modalitySelected, industrySelected, eventTypeSelected]);
   
   return (
     <section className="eventsFilter">

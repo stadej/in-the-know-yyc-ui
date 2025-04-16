@@ -3,8 +3,6 @@ import { useRouter } from 'next/navigation';
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 
-import { validateToken, getUserByToken } from '../../api/users';
-
 const App = () => {
 
   const router = useRouter();

@@ -1,38 +1,9 @@
-import { useState } from 'react';
 import React from "react";
 import Image from "next/image";
 import Link from 'next/link';
-import { Input } from "@nextui-org/input";
-import { Button } from "@nextui-org/button";
 import "../app/styles/components/footer.css";
 
-import useFooterNewsletterValidation from '../hooks/useSubscriptionValidation';
-import sendEmailSubscription from "@/api/newsletter";
-
 const Footer = () => {
-
-    // Data validation in newsletter form
-    const [isDisabled, setIsDisabled] = useState(true);
-    const [errorMessage, setErrorMessage] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
-
-    useFooterNewsletterValidation(setIsDisabled, setErrorMessage, setSuccessMessage);
-
-    /**
-     * Handles the newsletter subscription form submission.
-     * @param {Event} event - The form submission event.
-     */
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const email = event.target.elements.newsletter_subscription.value;
-        const response = await sendEmailSubscription(email);
-        console.log('ENVIO MAIL FRONT:', email, response)
-        if (response.type === 'success') {
-            setSuccessMessage(response.message);
-        } else {
-            setErrorMessage(response.message);
-        }
-    };
 
     // USAR DESCRIPTION PARA OCULTAR FORM DESPUES DE SUBMITEAR??
     return (

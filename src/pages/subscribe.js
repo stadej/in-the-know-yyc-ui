@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import Link from "next/link";
-import Image from "next/image";
 import { Input } from "@nextui-org/input";
 
 import "../app/styles/pages/subscribe.css";

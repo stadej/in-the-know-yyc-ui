@@ -1,6 +1,5 @@
 import "../app/styles/components/textPages.css";
 import Image from "next/image";
-import Link from "next/link";
 
 // SEO: Pages metadata
 import pagesMetaData from "../utils/pagesMetaData";
@@ -20,8 +19,8 @@ export default function About({ metadata }) {
                     <Image src={'/images/about/debbie-butt-small.png'} width={206} height={212} alt="Debbie Butt" />
                 </p>
                 <p>Accountant by day, Community Builder & Technology Enthusiast by night, Debbie does a little bit of everything. </p>
-                <p>In her spare time she works tirelessly to track down all of Calgary's most relevant and exciting Tech & Business events and news. Placing her findings at the fingertips of the rapidly growing "In the Know YYC Community." Join today by clicking "Subscribe" on the landing page.</p>
-                <p>Debbie has earned her credibility as a Tech & Business Event Reporter by participating in 100's of technology and business events over the last 4 years. Her passion is communicating to interested parties the value and benefits in attending these events.</p>
+                <p>In her spare time she works tirelessly to track down all of Calgary&apos;s most relevant and exciting Tech & Business events and news. Placing her findings at the fingertips of the rapidly growing &quot;In the Know YYC Community.&quot; Join today by clicking &quot;Subscribe&quot; on the landing page.</p>
+                <p>Debbie has earned her credibility as a Tech & Business Event Reporter by participating in hundreds of technology and business events over the last 4 years. Her passion is communicating to interested parties the value and benefits in attending these events.</p>
             </main>
         </>
     );

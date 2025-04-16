@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import isValidImageUrl from "../../../utils/isValidImage";
 
 // API
-import { getFilteredEvents, getAllEvents, switchEventStatus, deleteEvent, updateEvent, createEvent, uploadImage } from '../../../api/events';
+import { getAllEvents, switchEventStatus, deleteEvent, updateEvent, createEvent, uploadImage } from '../../../api/events';
 import { validateToken, getUserByToken } from '../../../api/users';
 
 // NextUI Components
@@ -26,8 +26,6 @@ import 'react-toastify/dist/ReactToastify.css';
 // MODAL
 import { Modal, ModalContent, useDisclosure } from "@nextui-org/modal";
 import ModalEventsContent from '../../../components/cms/ModalEventsContent';
-
-import CardHorizontal from '../../../components/CardHorizontal';
 
 export default function AllEvents({ eventsList, searchParams }) {
   
@@ -47,10 +45,9 @@ export default function AllEvents({ eventsList, searchParams }) {
     if (!events || events.length === 0) {
       fetchMoreEvents();
     }
-  }, []);
+  });
 
   
-
   useEffect(() => {
     const validateTokenAsAdmin = async () => {
       await validateToken();
@@ -334,7 +331,7 @@ export default function AllEvents({ eventsList, searchParams }) {
 }
 
 // SSR RENDERING (ONLY FIRST BATCH OF EVENTS)
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
   // const events = await getAllEvents(context.query);
   // return { props: { eventsList: events.data.content, searchParams: events.params}};
   return { props: { eventsList: [], searchParams: {

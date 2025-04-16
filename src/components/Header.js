@@ -1,7 +1,6 @@
 import React from "react";
 import Link from 'next/link';
 import Image from 'next/image';
-import SearchEventInput from './SearchEventInput'
 import "../app/styles/components/header.css";
 
 // HOOK TO OPEN AND CLOSE THE MENU IN MOBILE VERSION

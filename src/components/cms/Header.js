@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from "@nextui-org/react";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import Image from "next/image";
 import Link from "next/link";
 

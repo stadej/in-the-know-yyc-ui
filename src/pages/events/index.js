@@ -38,24 +38,6 @@ export default function AllEvents({ eventsList, searchParams, metadata }) {
     }
   };
 
-  const handleSearch = async (searchText) => {
-    const dateNow = new Date();
-    const dateTimeNow = moment(dateNow).format('YYYY-MM-DDTHH:mm:ss');
-
-    setParams({
-      sortField: 'eventDate',
-      sortDirection: 'asc',
-      size: 10,
-      startDate: dateTimeNow,
-      searchText: searchText
-    });
-
-    setEvents([]);
-    setMoreEventsAvailable(true);
-
-    await fetchMoreEvents();
-  }
-
   const handleFilter = (filteredEvents) => {
     setFilteredEvents(filteredEvents);
   };

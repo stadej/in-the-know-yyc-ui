@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getToken, refreshToken } from '@/api/users';
+import { refreshToken } from '@/api/users';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,

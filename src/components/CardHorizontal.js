@@ -1,11 +1,9 @@
 import Link from "next/link";
 import "../app/styles/components/cardHorizontal.css";
 import moment from "moment/moment";
-import isValidImageUrl from "../utils/isValidImage";
 
 const CardHorizontal = ({ content }) => {
 
-  const image = isValidImageUrl(content.eventImage);
   const dateTime = moment(content.eventDate+'Z');
   const endTime = content.eventEndTime ? moment(content.eventEndTime+'Z'): "";
   
