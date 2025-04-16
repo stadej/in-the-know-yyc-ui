@@ -1,6 +1,12 @@
-div#publicLayout div#events-horizontal-container {
+div#publicLayout div#events-vertical-container {
+    display: flex;
+    flex-direction: row;
     width: 100%;
-    padding: 0 7dvw;
+    padding: 0 4dvw;
+}
+
+div#publicLayout div#events-horizontal-container {
+    width: 70%;
 }
 
 div#publicLayout div#events-horizontal-container div.infinite-scroll-component {
@@ -38,7 +44,11 @@ div#publicLayout .endMessage{
 
 /* MOBILE */
 @media only screen and (max-width: 800px) {
-    div#publicLayout div#events-horizontal-container {
+    div#publicLayout div#events-vertical-container {
+        flex-direction: column;
         padding: 2rem 3rem;
+    }
+    div#publicLayout div#events-horizontal-container {
+        width: 100%;
     }
 }

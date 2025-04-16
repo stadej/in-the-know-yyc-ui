@@ -6,13 +6,22 @@ import Community from '../components/Community';
 
 // FETCHING NEXT 6 EVENTS EVENTS
 import { getNextEvents } from '../api/events';
+import { useRouter } from 'next/navigation';
 
 // SEO: Pages metadata
 import pagesMetaData from "../utils/pagesMetaData";
 import PagesMetaData from "../components/PagesMetaData";
 
+import { useEffect } from 'react';
+
 
 export default function Home({ latestEvents, metadata }) {
+
+  const router = useRouter();
+  useEffect(() => {
+    router.push('/events');
+  }, [router]);
+
   return (
     <>
       <PagesMetaData metadata={metadata} />

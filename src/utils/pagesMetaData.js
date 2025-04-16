@@ -26,6 +26,11 @@ export default async function pagesMetaData(page = 'default', event = {}){
             description = 'Have questions or comments? Reach out to us through our contact form and get authorization to publish your events on our platform.';
             siteURL += 'contact'
             break;
+        case 'subscribe':
+            title = 'SUBSCRIBE | '+title;
+            description = 'Subscribe to the In The Know YYC newsletter to recieve weekly updates for Tech and Business events in Calgary!';
+            siteURL += 'subscribe'
+            break;
         case 'event':
             title = event.title || title;
             description = event.description || description;

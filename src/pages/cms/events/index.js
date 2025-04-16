@@ -1,12 +1,15 @@
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import moment from "moment/moment";
 
+import { useRouter } from 'next/navigation';
+
+import isValidImageUrl from "../../../utils/isValidImage";
 
 // API
-import { getAllEvents, switchEventStatus, deleteEvent, updateEvent, createEvent, uploadImage } from '../../../api/events';
-
+import { getFilteredEvents, getAllEvents, switchEventStatus, deleteEvent, updateEvent, createEvent, uploadImage } from '../../../api/events';
+import { validateToken, getUserByToken } from '../../../api/users';
 
 // NextUI Components
 import { Chip } from "@nextui-org/chip";
@@ -24,8 +27,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Modal, ModalContent, useDisclosure } from "@nextui-org/modal";
 import ModalEventsContent from '../../../components/cms/ModalEventsContent';
 
+import CardHorizontal from '../../../components/CardHorizontal';
+
 export default function AllEvents({ eventsList, searchParams }) {
   
+  const router = useRouter();
+
   // EVENTS FETCHING
   const [events, setEvents] = useState(eventsList);
   const [params, setParams] = useState(searchParams);
@@ -36,31 +43,58 @@ export default function AllEvents({ eventsList, searchParams }) {
 
   // CHECK IF EVENTS IS EMPTY TO RUN THE FIRST CALL
   /* ******* ARREGLAR! tira error por mucho rendering. Falta el dependency array... ******* */
-  // useEffect(() => {
-  //   if (!events || events.length === 0) {
-  //     fetchMoreEvents();
-  //   }
-  // });
+  useEffect(() => {
+    if (!events || events.length === 0) {
+      fetchMoreEvents();
+    }
+  }, []);
 
+  
+
+  useEffect(() => {
+    const validateTokenAsAdmin = async () => {
+      await validateToken();
+      try {
+        const token = localStorage.getItem('authToken');
+        let role = '';
+    
+        if (token){
+          await getUserByToken(token);
+          role = localStorage.getItem('userRole');
+        }
+    
+        if (role !== 'ROLE_ADMIN'){
+          router.push('/cms/login');
+        }
+      }
+      catch(e){
+        console.log('TOKEN VALIDATION ERROR: ', e);
+      }
+    }
+    validateTokenAsAdmin();
+  }, [router]);
 
   // CSR RENDERING (ALL THE EVENTS ON INFINITE SCROLL)
   const fetchMoreEvents = async () => {
-    setParams((prevParams) => ({
-      ...prevParams,
-      page: (prevParams.page + 1),
-    }));
+    // setParams((prevParams) => ({
+    //   ...prevParams,
+    //   page: (prevParams.page + 1),
+    // }));
 
     if (moreEventsAvailable) {
       try {
         const newEvents = await getAllEvents(params);
 
-        // Filter out duplicates based on unique IDs
-        const uniqueNewEvents = newEvents.data.content.filter(
-          (newEvent) => !events.some((existingEvent) => existingEvent.id === newEvent.id)
-        );
+        //console.log(newEvents);
 
-        //setEvents((prevEvents) => [...prevEvents, ...newEvents.data.content]);
-        setEvents((prevEvents) => [...prevEvents, ...uniqueNewEvents]);
+        // Filter out duplicates based on unique IDs
+        // const uniqueNewEvents = newEvents.data.content.filter(
+        //   (newEvent) => !events.some((existingEvent) => existingEvent.id === newEvent.id)
+        // );
+
+        setParams(newEvents.params);
+        setEvents((prevEvents) => [...prevEvents, ...newEvents.data.content]);
+        // setEvents((prevEvents) => [...prevEvents, ...uniqueNewEvents]);
 
 
         setMoreEventsAvailable((newEvents.data.totalPages > newEvents.data.number));
@@ -85,29 +119,20 @@ export default function AllEvents({ eventsList, searchParams }) {
 
 
   // EVENTS CRUD
-  const missingInfo = (ev) => {
-    const missingInfo = [
-      (!ev.eventDate || ev.eventDate === 'undefined' || ev.eventDate === null) ? 'Date' : '',
-      (!ev.eventDescription || ev.eventDescription === 'undefined' || ev.eventDescription === null) ? 'Description' : '',
-      (!ev.eventImage || ev.eventImage === 'undefined' || ev.eventImage === null) ? 'Image' : '',
-      (!ev.eventLink || ev.eventLink === 'undefined' || ev.eventLink === null) ? 'Link' : '',
-      (!ev.eventName || ev.eventName === 'undefined' || ev.eventName === null) ? 'Name' : '',
-      (!ev.eventType || ev.eventType === 'undefined' || ev.eventType === null) ? 'Type' : '',
-      (!ev.industry || ev.industry === 'undefined' || ev.industry === null) ? 'Industry' : '',
-      (!ev.location || ev.location === 'undefined' || ev.location === null) ? 'Location' : '',
-      (!ev.organizationName || ev.organizationName === 'undefined' || ev.organizationName === null) ? 'Organization Name' : '',
-      (!ev.freeEvent && (!ev.eventCost || ev.eventCost === 'undefined' || ev.eventCost === null)) ? 'Price' : '',
-      (!ev.industry || ev.industry === 'undefined' || ev.industry === null) ? 'Industry' : '',
-      (!ev.industry || ev.speakers.length === 0) ? 'Speakers' : '',
-    ].filter(i => i !== '');
+  const hiddenEvents = (ev) => {
+    const dateNow = new Date();
+    const eventDate = new Date(ev.eventDate);
 
-    if (missingInfo.length === 0) {
-      return (<Tooltip content={'There is no mising information for this event'} color='success'><Avatar size='sm' src='#' className='bg-success-200' /></Tooltip>);
-    } else {
-      const tooltipContent = 'MISSING INFORMATION: ' + missingInfo.join(' , ');
+    if (dateNow > eventDate) {
       return (
-        <Tooltip content={tooltipContent} color='warning'><Avatar size='sm' src='/images/icons/warning.svg' className='bg-white border-solid border-2 border-danger-700 p-1' /></Tooltip>
+        <Tooltip content={'This event has already passed'} color='red'><Avatar size='sm' src='/images/icons/error.svg' className='bg-white border-solid border-2 border-danger-700 p-1' /></Tooltip>
       )
+    } else if (ev.status !== 'approved') {
+      return (
+        <Tooltip content={'This event has not been made public'} color='warning'><Avatar size='sm' src='/images/icons/warning.svg' className='bg-white border-solid border-2 border-danger-700 p-1' /></Tooltip>
+      )
+    } else {
+      return (<Tooltip content={'This event has been made public'} color='success'><Avatar size='sm' src='#' className='bg-success-200' /></Tooltip>);
     }
   }
 
@@ -129,6 +154,7 @@ export default function AllEvents({ eventsList, searchParams }) {
       }
     }
   };
+
   const handleEventDeletion = async (eventId, onClose) => {
     const eventDeleted = await deleteEvent(eventId);
     
@@ -162,9 +188,8 @@ export default function AllEvents({ eventsList, searchParams }) {
         (!evt.freeEvent && evt.eventCost <= 0) || 
         evt.eventLink === '' || 
         evt.eventType === '' || 
-        evt.location === '' || 
-        evt.industry === '' || 
-        evt.eventImage === ''
+        (!evt.onlineEvent && evt.location === '') || 
+        evt.industry === ''
       ){
       toast.error('You are missing required fields.', { theme: 'colored' })
       return false;
@@ -175,8 +200,10 @@ export default function AllEvents({ eventsList, searchParams }) {
   const handleFormSubmit = async (type, evt, onClose) => {
 
     // IMAGE UPLOAD IF SELECTED IN INPUT
-    const eventImage = await uploadEventImage(evt.eventImage);
-    evt = {...evt, eventImage: eventImage}
+    if(evt.eventImage !== ''){
+      const eventImage = await uploadEventImage(evt.eventImage);
+      evt = {...evt, eventImage: eventImage}
+    }
 
     // FORM VALIDATION
     if(!eventFormValidation(evt)){ return; }
@@ -188,21 +215,33 @@ export default function AllEvents({ eventsList, searchParams }) {
     // MESSAGES
     switch(response.type){
       case 'success':
+        var updatedEvents = [...events];
+        const index = updatedEvents.findIndex(e => e.id === response.response.data.id);
+        if(index === -1){
+          updatedEvents = [...updatedEvents, response.response.data];
+        }
+        else{
+          updatedEvents[index] = response.response.data;
+        }
+        updatedEvents.sort((a, b) => {
+          return (new Date(a.eventDate) - new Date(b.eventDate))
+        });
+        setEvents(updatedEvents);
         const successMesage = (type === 'edit') ? "updated" : "created"
         toast.success(`The event was ${successMesage} successfully`, { theme: 'colored' });
         break;
       case 'error':
         const errorMesage = (type === 'edit') ? "updating" : "creating"
-        toast.error(`There was an error ${errorMesage} the event. Pleas try again later.`, { theme: 'colored' });
+        toast.error(`There was an error ${errorMesage} the event. Please try again later.`, { theme: 'colored' });
         break;
       default:
-        toast.error(`There was an unexpected error. Pleas try again later.`, { theme: 'colored' });
+        toast.error(`There was an unexpected error. Please try again later.`, { theme: 'colored' });
     }
 
     // CLOSE MODAL
-    onClose();
+    onClose();    
 
-    console.log('RESPONSE CRUD:', response)
+    console.log('RESPONSE CRUD:', response);
   }
 
   return (
@@ -228,33 +267,29 @@ export default function AllEvents({ eventsList, searchParams }) {
               // className='bg-green-400'
               key={`event_id_key_${ev.id}_${index}`}
               aria-label={(ev.eventName) ? ev.eventName : 'NO TITLE'}
-              title={(ev.eventName) ? ev.id + ' | ' + ev.eventName + ' | - - - > ' + ev.status : ev.id + ' | NO TITLE | - - - > ' + ev.status}
-              startContent={missingInfo(ev)}
+              title={(ev.eventName) ? ev.id + ' | ' + ev.eventName + ' | ' + moment(ev.eventDate +'Z').format('YYYY-MM-DD') : ev.id + ' | NO TITLE | '}
+              startContent={hiddenEvents(ev)}
             >
               <div className="flex w-full flex-col">
 
                 {/* EVENT INFORMATION TABS: IMAGE | DESCRIPTION | DETAILS */}
                 <Tabs aria-label="Options" variant='light'>
-                  <Tab key="image" title='Images' className={(!ev.eventImage) ? 'bg-warning-100' : ''}>
-                    {(!ev.eventImage) ? ' - No image -' : <Image src={ev.eventImage} width={'805'} height={'664'} alt='' />}
-                  </Tab>
-                  <Tab key="description" title="Description" className={(!ev.eventDescription) ? 'bg-warning-100' : ''} >
-                    {(!ev.eventDescription) ? ' - No description -' : ev.eventDescription}
-                  </Tab>
-                  <Tab key="details" title="Details" className={(!ev.eventDate || !ev.location || !ev.eventLink || !ev.eventType || !ev.industry || ev.speakers.length === 0) ? 'bg-warning-100' : ''}>
-                    <p><b>Date: </b>{(ev.eventDate) ? moment(ev.eventDate).format('DD/MM/YYYY') : <Chip color='warning'>No date</Chip>}</p>
-                    <p><b>Time: </b>{(ev.eventDate) ? moment(ev.eventDate).format('HH:MM') : <Chip color='warning'>No time</Chip>}</p>
+                  <Tab key="details" title="Details" className={(!ev.eventDate || !ev.location || !ev.eventLink || !ev.eventType || !ev.industry) ? 'bg-warning-100' : ''}>
+                    <p><b>Date: </b>{(ev.eventDate) ? moment(ev.eventDate + 'Z').format('YYYY-MM-DD') : <Chip color='warning'>No date</Chip>}</p>
+                    <p><b>Start Time: </b>{(ev.eventDate) ? moment(ev.eventDate +'Z').format('h:mm a') : <Chip color='warning'>No time</Chip>}</p>
+                    <p><b>End Time: </b>{(ev.eventEndTime) ? moment(ev.eventEndTime + 'Z').format('h:mm a') : <Chip color='warning'>No time</Chip>}</p>
                     <p><b>Location: </b>{(ev.location) ? ev.location : <Chip color='warning'>No location</Chip>}</p>
                     <p><b>Price: </b>{(ev.freeEvent) ? 'Free' : ev.eventCost}</p>
                     <p><b>Link: </b>{(ev.eventLink) ? ev.eventLink : <Chip color='warning'>No link</Chip>}</p>
                     <p><b>Type: </b>{(ev.eventType) ? ev.eventType : <Chip color='warning'>No type</Chip>}</p>
                     <p><b>Industry: </b>{(ev.industry) ? ev.industry : <Chip color='warning'>No industry</Chip>}</p>
                     <p><b>Organization: </b>{(ev.organizationName) ? ev.organizationName : <Chip color='warning'>No Organization</Chip>}</p>
-                    <p><b>Speakers: </b>{
-                      (ev.speakers.length === 0) ? <Chip color='warning'>No speakers</Chip> : ev.speakers.map((speaker, index) => {
-                        return (<div key={`speaker_${ev.id}_${index}`}>{speaker.name} ({speaker.company})</div>)
-                      })
-                    }</p>
+                  </Tab>
+                  <Tab key="description" title="Description" className={(!ev.eventDescription) ? 'bg-warning-100' : ''} >
+                    {(!ev.eventDescription) ? ' - No description -' : ev.eventDescription}
+                  </Tab>
+                  <Tab key="image" title='Images' className={(!ev.eventImage) ? 'bg-warning-100' : ''}>
+                    {(!ev.eventImage) ? ' - No image -' : <Image src={isValidImageUrl(ev.eventImage)} width={'200'} height={'200'} alt='' />}
                   </Tab>
                 </Tabs>
 
@@ -300,9 +335,15 @@ export default function AllEvents({ eventsList, searchParams }) {
 
 // SSR RENDERING (ONLY FIRST BATCH OF EVENTS)
 export async function getServerSideProps(context) {
-  const filters = { ...context.query, size: 10, sortField: 'eventDate', sortDirection: 'asc', page: 0 }
-
-  return { props: { eventsList: [], searchParams: filters } };
+  // const events = await getAllEvents(context.query);
+  // return { props: { eventsList: events.data.content, searchParams: events.params}};
+  return { props: { eventsList: [], searchParams: {
+    startDate: '',
+    page: 0,
+    sortField: 'eventDate',
+    sortDirection: 'asc',
+    size: 10
+  }}};
 }
 
 

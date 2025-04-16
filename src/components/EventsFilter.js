@@ -1,112 +1,160 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React from "react";
 import { DatePicker } from "@nextui-org/date-picker";
 import { parseDate } from "@internationalized/date";
-import { Select, SelectItem } from "@nextui-org/select";
+import {CheckboxGroup, Checkbox} from "@nextui-org/checkbox";
 import SearchEventInput from './SearchEventInput'
+import moment from "moment/moment";
 import "../app/styles/components/eventsFilter.css";
 
-const EventsFilter = ({filters}) => {
+const EventsFilter = ({params, events, handleFilter}) => {
 
-  // PARSING DATE FROM FILTERS (IF EXISTS)
-  const filteredDate = (filters && filters.startDate) ? filters.startDate.substring(0, 10) : null; 
-  // PARSING DATE FOR DATEPICKER VALUE
-  const initialDate = (filteredDate) ? parseDate(filteredDate) : null;
-  // SETTING DATEPICKER DESCRIPTION TO SHOW A DATE OR A PLACEHOLDER "DATE"
-  const [dateDescription, setDateDescription] = useState(filteredDate || 'Date')
+  const dateNow = new Date();
+  const dateTimeNow = moment(dateNow).format('YYYY-MM-DD');
+  const [startDate, setStartDate] = useState(parseDate(dateTimeNow));
+  const [endDate, setEndDate] = useState(null);
   
-  
+  const [costSelected, setCostSelected] = useState(["free","paid"]);
+  const [modalitySelected, setModalitySelected] = useState(["online","inperson"]);
+  const [industrySelected, setIndustrySelected] = useState(["Tech","Business","Other"]);
+  const [eventTypeSelected, setEventTypeSelected] = useState(["Meetup","Conference","Showcase","General","Networking","Hackathon","Specialization","Other"]);
+
+  // filter function, called when any filter field is changed
+  useEffect(() => {
+    const filteredEvents = events.filter((event) => {
+
+      //filter out dates outside selected range
+      if (new Date(event.eventDate + 'Z') < new Date(startDate)){
+        return false;
+      }
+      if (endDate && new Date(event.eventDate + 'Z') > new Date(endDate)){
+        return false;
+      }
+
+      //filter out free/paid events
+      if (event.freeEvent && !costSelected.includes("free")){
+        return false;
+      }
+      if (!event.freeEvent && !costSelected.includes("paid")){
+        return false;
+      }
+
+      //filter out online/inperson events
+      if (event.onlineEvent && !modalitySelected.includes("online")){
+        return false;
+      }
+      if (!event.onlineEvent && !modalitySelected.includes("inperson")){
+        return false;
+      }
+
+      //filter out deselected industry/event types
+      if (!industrySelected.includes(event.industry)){
+        return false;
+      }
+      if (!eventTypeSelected.includes(event.eventType)){
+        return false;
+      }
+
+      return true;
+    });
+
+    console.log(filteredEvents);
+
+    handleFilter(filteredEvents);
+
+  }, [events, startDate, endDate, costSelected, modalitySelected, industrySelected, eventTypeSelected]);
   
   return (
     <section className="eventsFilter">
-      <form action='/events' method='get' id="eventListSearchForm">
-        <input type="hidden" id="dateValue" name="date" value={initialDate || ''} />
-        <div className='searchContainer'>
-          <SearchEventInput inputId={'inputSearchEventsFilter'} formId={'eventListSearchForm'} searchText={filters.searchText} />
-        </div>
-        <div className='filtersContainer'>
-          <DatePicker 
-            label=''
-            placeholder='Date'
-            id='eventFilter-date' 
-            className='dateEventFilter'
-            aria-label="Date"
-            showMonthAndYearPickers
-            description={dateDescription}
-            defaultValue={initialDate}
-            onChange={
-              // this hides the "Date" placeholder to show the selected date
-              (e) => {
-                const dateValue = `${e.year}-${e.month}-${e.day}`;
-                document.getElementById('dateValue').value = dateValue;
-                document.getElementById('eventListSearchForm').submit();
-                setDateDescription('') 
+      <h4><b>Filter Events</b></h4><br/>
+      <div className="filtersContainer">
+        <form id="searchContainer">
+          <SearchEventInput inputId={'inputSearchEventsFilter'} formId={'eventListSearchForm'} searchText={params.searchText}/>
+        </form>
+        <ul>
+          <span>Date Range</span>
+          <br/>
+            <div className="dateEventsContainer">
+            <DatePicker 
+              label='Start Date'
+              labelPlacement="inside"
+              placeholder='Date'
+              id='eventFilter-startDate' 
+              className='dateEventFilter'
+              aria-label="Date"
+              showMonthAndYearPickers
+              minValue={parseDate(dateTimeNow)}
+              defaultValue={startDate}
+              onChange={
+                (value) => {
+                  setStartDate(value)
+                }
               }
-            }
-            onKeyDown={
-              // this prevents user input to avoid format errors
-              (e) => { e.preventDefault(); }
-            }
-            classNames={{
-              selectorIcon: "dateEventFilter-selectorIcon",
-              selectorButton: "dateEventFilter-selectorButton",
-              inputField: "dateEventFilter-inputField",
-            }}
-            dateInputClassNames={{
-              inputWrapper: "dateEventFilter-inputWrapper",
-              innerWrapper: "dateEventFilter-innerWrapper",
-              helperWrapper: "dateEventFilter-helperWrapper",
-              description: "dateEventFilter-descriptionMessage",
-            }}
-          />
-          <Select 
-            label="" 
-            placeholder="Distance" 
-            id='eventFilter-distance'
-            className='dropdownEventFilter'
-            aria-label='Distance'
-            classNames={{
-              mainWrapper: "dropdownEventFilter-mainWrapper",
-              innerWrapper:"dropdownEventFilter-innerWrapper",
-              inputWrapper: "dropdownEventFilter-inputWrapper",
-              helperWrapper: "dropdownEventFilter-helperWrapper",
-              description: "dropdownEventFilter-descriptionMessage",
-              selectorIcon: "dropdownEventFilter-selectorIcon"
-            }}
-          >
-              <SelectItem key={'distance_opt_1'}>Distance 1</SelectItem>
-              <SelectItem key={'distance_opt_2'}>Distance 2</SelectItem>
-              <SelectItem key={'distance_opt_3'}>Distance 3</SelectItem>
-              <SelectItem key={'distance_opt_4'}>Distance 4</SelectItem>
-              <SelectItem key={'distance_opt_5'}>Distance 5</SelectItem>
-              <SelectItem key={'distance_opt_6'}>Distance 6</SelectItem>
-              <SelectItem key={'distance_opt_7'}>Distance 7</SelectItem>
-          </Select>
-          <Select 
-            label="" 
-            placeholder="Industry" 
-            id='eventFilter-industry'
-            className='dropdownEventFilter'
-            aria-label='Industry'
-            classNames={{
-              mainWrapper: "dropdownEventFilter-mainWrapper",
-              innerWrapper:"dropdownEventFilter-innerWrapper",
-              inputWrapper: "dropdownEventFilter-inputWrapper",
-              helperWrapper: "dropdownEventFilter-helperWrapper",
-              description: "dropdownEventFilter-descriptionMessage",
-              selectorIcon: "dropdownEventFilter-selectorIcon"
-            }}
-          >
-              <SelectItem key={'industry_opt_1'}>Industry 1</SelectItem>
-              <SelectItem key={'industry_opt_2'}>Industry 2</SelectItem>
-              <SelectItem key={'industry_opt_3'}>Industry 3</SelectItem>
-              <SelectItem key={'industry_opt_4'}>Industry 4</SelectItem>
-              <SelectItem key={'industry_opt_5'}>Industry 5</SelectItem>
-              <SelectItem key={'industry_opt_6'}>Industry 6</SelectItem>
-              <SelectItem key={'industry_opt_7'}>Industry 7</SelectItem>
-          </Select>
-        </div>
-      </form>
+              classNames={{
+                selectorIcon: "dateEventFilter-selectorIcon",
+                selectorButton: "dateEventFilter-selectorButton",
+                inputField: "dateEventFilter-inputField",
+              }}
+              dateInputClassNames={{
+                inputWrapper: "dateEventFilter-inputWrapper",
+                innerWrapper: "dateEventFilter-innerWrapper",
+                helperWrapper: "dateEventFilter-helperWrapper",
+                description: "dateEventFilter-descriptionMessage",
+              }}
+            />
+            <DatePicker 
+              label='End Date'
+              labelPlacement="inside"
+              placeholder='Date'
+              id='eventFilter-endDate' 
+              className='dateEventFilter'
+              aria-label="Date"
+              minValue={parseDate(dateTimeNow)}
+              showMonthAndYearPickers
+              defaultValue=''
+              onChange={
+                (value) => {
+                  setEndDate(value)
+                }
+              }
+              classNames={{
+                selectorIcon: "dateEventFilter-selectorIcon",
+                selectorButton: "dateEventFilter-selectorButton",
+                inputField: "dateEventFilter-inputField",
+              }}
+              dateInputClassNames={{
+                inputWrapper: "dateEventFilter-inputWrapper",
+                innerWrapper: "dateEventFilter-innerWrapper",
+                helperWrapper: "dateEventFilter-helperWrapper",
+                description: "dateEventFilter-descriptionMessage",
+              }}
+            />
+          </div>
+        </ul>
+        <CheckboxGroup defaultValue={costSelected} onChange={(value) => {setCostSelected(value)}} label="Cost">
+          <Checkbox value="free">Free Events</Checkbox>
+          <Checkbox value="paid">Paid Events</Checkbox>
+        </CheckboxGroup>
+        <CheckboxGroup defaultValue={modalitySelected} onChange={(value) => {setModalitySelected(value)}} label="Modality">
+          <Checkbox value="online">Online</Checkbox>
+          <Checkbox value="inperson">In-Person</Checkbox>
+        </CheckboxGroup>
+        <CheckboxGroup defaultValue={industrySelected} onChange={(value) => {setIndustrySelected(value)}} label="Industry">
+          <Checkbox value="Tech">Tech</Checkbox>
+          <Checkbox value="Business">Business</Checkbox>
+          <Checkbox value="Other">Other</Checkbox>
+        </CheckboxGroup>
+        <CheckboxGroup defaultValue={eventTypeSelected} onChange={(value) => {setEventTypeSelected(value)}} label="Event Type">
+          <Checkbox value="Meetup">Meetup</Checkbox>
+          <Checkbox value="Conference">Conference</Checkbox>
+          <Checkbox value="Showcase">Showcase</Checkbox>
+          <Checkbox value="General">General</Checkbox>
+          <Checkbox value="Networking">Networking</Checkbox>
+          <Checkbox value="Hackathon">Hackathon</Checkbox>
+          <Checkbox value="Specialization">Specialization</Checkbox>
+          <Checkbox value="Other">Other</Checkbox>
+        </CheckboxGroup>
+      </div>
     </section>
   );
 };

@@ -1,26 +1,36 @@
 div#publicLayout section.eventsFilter{
-    width: 100%;
-    padding: 65px 7dvw;
+    width: 30%;
+    padding: 30px 3dvw;
+    
 }
 div#publicLayout section.eventsFilter form{
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-div#publicLayout section.eventsFilter form div.searchContainer{
+div#publicLayout section.eventsFilter h4{
+    margin: 0;
+    padding: 0;
+    font-size:1.5rem;
+    line-height: 2rem;
+    font-family: var(--font-sarabun);
+    color:#151515;
+    font-weight:400;
+}
+
+div#publicLayout section.eventsFilter div.filtersContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+div#publicLayout section.eventsFilter div.filtersContainer form{
     display: flex;
     justify-content: flex-start;
     width: fit-content;
 }
-div#publicLayout section.eventsFilter form div.searchContainer button.searchEventButton{
+div#publicLayout section.eventsFilter div.filtersContainer form button.searchEventButton{
     margin-left: .5rem;
-}
-
-div#publicLayout section.eventsFilter form div.filtersContainer{
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    width: fit-content;
 }
 
 
@@ -29,25 +39,32 @@ div#publicLayout section.eventsFilter form div.filtersContainer{
 /* *********************** */
 
 /* DATE SELECTOR */
-div#publicLayout section.eventsFilter form div.filtersContainer div.dateEventFilter{
+div#publicLayout section.eventsFilter div.filtersContainer div.dateEventsContainer{
     position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+div#publicLayout section.eventsFilter div.filtersContainer div.dateEventFilter{
+    position: relative;
+    width: 150px;
     padding: 0;
     border-radius:38px;
     box-shadow: 0px 4px 4px 0px #00000040;
     background-color: #FFFFFF;
 }
-div#publicLayout section.eventsFilter form div.filtersContainer div.dateEventFilter div.dateEventFilter-inputWrapper{
+div#publicLayout section.eventsFilter div.filtersContainer div.dateEventFilter div.dateEventFilter-inputWrapper{
     background-color: #FFFFFF;
 }
-div#publicLayout section.eventsFilter form div.filtersContainer div.dateEventFilter div.dateEventFilter-innerWrapper{
-    padding-right:1.3rem;
+div#publicLayout section.eventsFilter div.filtersContainer div.dateEventFilter div.dateEventFilter-innerWrapper{
+    padding-bottom:1.3rem;
     font-size: 1rem;
     color: #151515;
     font-family: var(--Montserrat);
     font-weight: 400;
     line-height: 1.25rem;
 }
-div#publicLayout section.eventsFilter form div.filtersContainer div.dateEventFilter div.dateEventFilter-helperWrapper{
+div#publicLayout section.eventsFilter div.filtersContainer div.dateEventFilter div.dateEventFilter-helperWrapper{
     position: absolute;
     display: flex;
     align-items: flex-start;
@@ -62,7 +79,7 @@ div#publicLayout section.eventsFilter form div.filtersContainer div.dateEventFil
     background: white;
     border-radius: 38px;
 }
-div#publicLayout section.eventsFilter form div.filtersContainer div.dateEventFilter div.dateEventFilter-helperWrapper div.dateEventFilter-descriptionMessage{
+div#publicLayout section.eventsFilter div.filtersContainer div.dateEventFilter div.dateEventFilter-helperWrapper div.dateEventFilter-descriptionMessage{
     color:#151515;
     font-family: var(--Montserrat);
     font-size: 1rem;
@@ -71,7 +88,7 @@ div#publicLayout section.eventsFilter form div.filtersContainer div.dateEventFil
     padding-left: .7rem;
     z-index: 0;
 }
-div#publicLayout section.eventsFilter form div.filtersContainer div.dateEventFilter button.dateEventFilter-selectorButton{
+div#publicLayout section.eventsFilter div.filtersContainer div.dateEventFilter button.dateEventFilter-selectorButton{
     position: absolute;
     top: 0;
     right: 0;
@@ -86,7 +103,7 @@ div#publicLayout section.eventsFilter form div.filtersContainer div.dateEventFil
     background-size: 1rem;
     z-index: 1;
 }
-div#publicLayout section.eventsFilter form div.filtersContainer div.dateEventFilter button.dateEventFilter-selectorButton svg.dateEventFilter-selectorIcon{
+div#publicLayout section.eventsFilter div.filtersContainer div.dateEventFilter button.dateEventFilter-selectorButton svg.dateEventFilter-selectorIcon{
     display: none;
 }
 
@@ -97,7 +114,7 @@ div#publicLayout section.eventsFilter form div.filtersContainer div.dropdownEven
     width: fit-content;
     background-color: #FFFFFF;
     padding: 0;
-    margin-left: 1rem;
+    margin-bottom: 1rem;
     border-radius:38px;
     box-shadow: 0px 4px 4px 0px #00000040;
 }
@@ -134,12 +151,15 @@ div#publicLayout section.eventsFilter form div.filtersContainer svg.dropdownEven
 
 @media only screen and (max-width: 800px) {
     div#publicLayout section.eventsFilter{
-        padding: 3rem;
+        width: 100%;
+
     }
     div#publicLayout section.eventsFilter form,
     div#publicLayout section.eventsFilter form div.searchContainer,
-    div#publicLayout section.eventsFilter form div.filtersContainer{
-        flex-direction: column;
+    div#publicLayout section.eventsFilter div.filtersContainer{
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
     }
     div#publicLayout section.eventsFilter form div.searchContainer,
     div#publicLayout section.eventsFilter form div.filtersContainer,

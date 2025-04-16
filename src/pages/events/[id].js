@@ -13,7 +13,8 @@ import PagesMetaData from "../../components/PagesMetaData";
 
 export default function EventInfo({ eventInformation, metadata }) {
     const eventImage = isValidImageUrl(eventInformation.eventImage)
-    const dateTime = moment(eventInformation.eventDate);
+    const dateTime = moment(eventInformation.eventDate + 'Z');
+    const endTime = eventInformation.eventEndTime ? moment(eventInformation.eventEndTime+'Z'): "";
 
     // const eventImage = '/images/events/evt2.png';
 
@@ -26,10 +27,6 @@ export default function EventInfo({ eventInformation, metadata }) {
                         <Image src={'/images/icons/back-arrow.svg'} width={'15'} height={'15'} alt='' />
                     </Link>
                     <h1>{eventInformation.eventName}</h1>
-                </div>
-                <div className="row-2">
-                    <Image src={eventImage} width={'805'} height={'664'} alt={eventInformation.eventName || ''} />
-                    <EventMap location={eventInformation.location} />
                 </div>
                 <div className="row-3">
                     <h2>About Event</h2>
@@ -50,17 +47,19 @@ export default function EventInfo({ eventInformation, metadata }) {
                             <p>{eventInformation.industry}</p>
                         </li>
                     </ul>
+                    <h3>Link to event page</h3>
+                    <Link className="attend" href={eventInformation.eventLink || '#'} target="_blank"> {eventInformation.eventLink || 'no link provided for this event'} </Link>
 
-                    {(eventInformation.speakers && typeof eventInformation.speakers === 'array') ? eventInformation.speakers.map((speaker, index) => {
-                        return <label className="speaker" key={`speaker_${index}`}>{speaker}</label>
-                    }) : ''}
                     <label className="date">{dateTime.format('MMMM D, YYYY')}</label>
-                    <label className="time">{dateTime.format('h:mm a z')}</label>
-                    <label className="location">{eventInformation.location}</label>
+                    {endTime === "" && (
+                        <label className="time">{dateTime.format('h:mm a z')}</label>
+                    )}
+                    {endTime !== "" && (
+                        <label className="time">{dateTime.format('h:mm') + ' - ' + endTime.format('h:mm a z')}</label>
+                    )}
+                    <label className="location">{(eventInformation.onlineEvent) ? 'Online' : eventInformation.location}</label>
 
                     <label className="admission"><b>Admission:</b> {(eventInformation.freeEvent) ? 'Free' : `$ ${eventInformation.eventCost.toFixed(2)}`}</label>
-
-                    <Link className="attend" href={eventInformation.eventLink || '#'} target="_blank"> Attend </Link>
 
 
                 </div>

@@ -8,7 +8,7 @@ const CardVertical = ({content}) => {
   // NEEDS DEFINITION FOR IMAGE FULL PATH!
   const image = isValidImageUrl(content.eventImage);
   
-  const date = moment(content.eventDate).format('MMM DD, YYYY');
+  const date = moment(content.eventDate + 'Z').format('MMM DD, YYYY');
 
   return (
     <Link href={`/events/${content.id}`} className="cardVerticalContainer">

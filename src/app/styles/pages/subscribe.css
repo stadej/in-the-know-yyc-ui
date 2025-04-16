@@ -1,0 +1,124 @@
+div#publicLayout main#subscribe{
+    width: 100%;
+    padding: 3.75rem 7dvw 0;
+}
+div#publicLayout main#subscribe h1{
+    margin:1rem 0 3rem 0;
+    padding:0;
+    color:#151515;
+    font-family: var(--font-sarabun);
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 3.25rem;
+    width:fit-content;
+    text-align: center;
+}
+
+div#publicLayout main#subscribe div.subscribeFormContainer{
+    display: flex;
+    align-items: flex-start;
+    margin:1rem 0 3rem 0;
+    width: 550px;
+    justify-content: center;
+}
+div#publicLayout main#subscribe div.subscribeFormContainer div#subscriptionFormMessage{
+    display: inline-block;
+    width: 0;
+    height: 0;
+    font-family: var(--font-montserrat);
+    font-size: 1.5rem;
+    text-align: center;
+    line-height: 2rem;
+    font-weight: 700;
+    background-color:#81BEFF;
+    color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 #007BFF;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    overflow: hidden;
+}
+div#publicLayout main#subscribe div.subscribeFormContainer div#subscriptionFormMessage.opened{
+    width:445px;
+    height: fit-content;
+    opacity: 1;
+    padding: 2rem 1rem;
+    margin-top: 1rem;
+}
+div#publicLayout main#subscribe div.subscribeFormContainer form{
+    display: inline-block;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+    transition: opacity height .3s ease-in-out;
+    vertical-align: top;
+}
+div#publicLayout main#subscribe div.subscribeFormContainer form.closing{
+    opacity: 0;
+}
+div#publicLayout main#subscribe div.subscribeFormContainer form.closed{
+    width: 0;
+}
+div#publicLayout main#subscribe div.subscribeFormContainer form .formInput{
+    width: 100%;
+    margin: 2rem 0 1rem 0;
+}
+div#publicLayout main#subscribe div.subscribeFormContainer form .formInput .inputContact-mainWrapper{
+    height: 4rem;
+}
+div#publicLayout main#subscribe div.subscribeFormContainer form .formInput .inputContact-innerWrapper,
+div#publicLayout main#subscribe div.subscribeFormContainer form .formInput .inputContact-inputWrapper{
+    background-color: transparent;
+    padding: 0;
+}
+div#publicLayout main#subscribe div.subscribeFormContainer form .formInput label{
+    font-family: var(--font-sarabun);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color:#151515;
+    z-index: 0;
+}
+div#publicLayout main#subscribe div.subscribeFormContainer form .formInput input{
+    width: 100%;
+    border: solid 1px #E6E6E6;
+    border-radius:10px;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    padding: 10px;
+}
+
+div#publicLayout main#subscribe div.subscribeFormContainer form button{
+    width: 100%;
+    border: none;
+    border-radius:10px;
+    padding: 20px;
+    text-align: center;
+    background-color: #007BFF;
+    font-family: var(--font-sarabun);
+    font-weight: 700;;
+    font-size: 1.5rem;
+    line-height: 1.95rem;
+    color:#FFFFFF;
+    margin-top: 2.5rem;
+}
+
+@media only screen and (max-width: 800px) {
+    div#publicLayout main#subscribe{
+        padding-top: 0;
+        height: 700px;
+    }
+    div#publicLayout main#subscribe h1{
+        font-size: 1.5rem;
+        margin-top: 0;
+    }
+    div#publicLayout main#subscribe div.subscribeFormContainer{
+        width: 80vw;
+    }
+    div#publicLayout main#subscribe div.subscribeFormContainer div#formSubmitionMessage.opened,
+    div#publicLayout main#subscribe div.subscribeFormContainer,
+
+    div#publicLayout main#subscribe div.subscribeFormContainer form.closed{
+        height: 0;
+    }
+}
