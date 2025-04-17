@@ -74,4 +74,4 @@ jobs:
           docker system prune --all -f
 
       - name: Run docker container
-        run: docker run -d -p 443:443 --name in-the-know-yyc-ui-${{ needs.prepare-env.outputs.env }}-container intheknowyyc/in-the-know-yyc-ui-${{ needs.prepare-env.outputs.env }}
+        run: docker run -d -p 3000:3000 --name in-the-know-yyc-ui-${{ needs.prepare-env.outputs.env }}-container intheknowyyc/in-the-know-yyc-ui-${{ needs.prepare-env.outputs.env }}
