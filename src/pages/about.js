@@ -15,7 +15,7 @@ export default function About({ metadata }) {
                 
                 <h2>IN THE KNOW YYC is your go-to guide for discovering Calgary&apos;s most exciting tech, business, and innovation events.</h2>
 
-                <p>Whether you're a founder, job seeker, community builder, or just curious about what&apos;s happening in the ecosystem, we help you stay connected, expand your network, and make the most of Calgary&apos;s vibrant event scene. Our curated listings are updated weekly, with highlights featured in a popular newsletter that&apos;s trusted by hundreds of engaged readers. </p>
+                <p>Whether you&apos;re a founder, job seeker, community builder, or just curious about what&apos;s happening in the ecosystem, we help you stay connected, expand your network, and make the most of Calgary&apos;s vibrant event scene. Our curated listings are updated weekly, with highlights featured in a popular newsletter that&apos;s trusted by hundreds of engaged readers. </p>
                 
                 <h2><Link href="https://www.linkedin.com/in/debbie-butt/" target="_blank">Debbie Butt</Link> &ndash; Founder of IN THE KNOW YYC </h2>
                 <p>
