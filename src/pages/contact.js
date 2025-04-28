@@ -14,7 +14,7 @@ export default function Contact({metadata}) {
     const [messageText, setMessageText] = useState('');
 
     const sendEmail = () => {
-        window.open(`mailto:intheknowyyc1@gmail.com?subject=Question From The Website&body=${messageText}`);
+        window.open(`mailto:contact@intheknowyyc.com?subject=Question From The Website&body=${messageText}`);
     }
 
     useContactFormValidation();
@@ -55,11 +55,11 @@ export default function Contact({metadata}) {
                     <div className="contactInfo">
                         <ul>
                             <li>
-                                <Link href={'mailto:intheknowyyc1@gmail.com'} target="_blank">
+                                <Link href={'mailto:contact@intheknowyyc.com'} target="_blank">
                                     <div className="iconContainer">
                                         <Image src={'/images/social/email.svg'} width={24} height={24} alt="" />
                                     </div>
-                                    intheknowyyc1@gmail.com
+                                    contact@intheknowyyc.com
                                 </Link>
                             </li>
                             <li>

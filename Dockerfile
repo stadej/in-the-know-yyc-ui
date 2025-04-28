@@ -11,5 +11,5 @@ COPY package*.json ./
 RUN npm install --prodaction
 COPY . .
 RUN npm run build
-EXPOSE 443
+EXPOSE 3000
 CMD [ "npm","run","start"]

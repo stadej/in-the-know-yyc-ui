@@ -34,6 +34,16 @@ div#publicLayout .textPage p{
     margin-top:2rem;
     text-align: center;
 }
+div#publicLayout .textPage p img{
+    height: 210px;
+    width: 210px;
+    object-fit: cover; 
+    border-radius: 20px;
+}
+div#publicLayout .textPage h2 a{
+    text-decoration: underline;
+    color: #007BFF;
+}
 div#publicLayout .textPage ul{
     width: 100%;
     margin:0;
